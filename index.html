@@ -18,10 +18,30 @@
 <body>
   <div class="container">
     <div class="toolbar">
-      <span>InfGorInf19593.pdf</span>
+      <span id="status">Cargando InfGorInf19593.pdf...</span>
       <a href="https://raw.githubusercontent.com/GorillaInforma/informe001/main/InfGorInf19593.pdf" target="_blank">Abrir en pestaña nueva ⬈</a>
     </div>
-    <iframe src="https://raw.githubusercontent.com/GorillaInforma/informe001/main/InfGorInf19593.pdf"></iframe>
+    <iframe id="viewer" style="display:none;"></iframe>
   </div>
+
+  <script>
+    const url = "https://raw.githubusercontent.com/GorillaInforma/informe001/main/InfGorInf19593.pdf";
+    fetch(url)
+      .then(res => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.blob();
+      })
+      .then(blob => {
+        const pdfBlob = blob.slice(0, blob.size, "application/pdf");
+        const blobUrl = URL.createObjectURL(pdfBlob);
+        const iframe = document.getElementById("viewer");
+        iframe.src = blobUrl;
+        iframe.style.display = "block";
+        document.getElementById("status").textContent = "InfGorInf19593.pdf";
+      })
+      .catch(err => {
+        document.getElementById("status").textContent = "No se pudo cargar el PDF: " + err.message;
+      });
+  </script>
 </body>
 </html>
